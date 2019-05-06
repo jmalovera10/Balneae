@@ -16,25 +16,26 @@ export default class Navbar extends Component {
                 </Link>
 
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-                    <form className="form-inline my-2 my-lg-0">
+                    <div className="navbar-nav ml-auto">
                         <Link to="/">
-                            <button className="btn my-2 my-sm-0">Inicio</button>
+                            <button className="btn my-2 my-sm-0 btn-navbar">Inicio</button>
                         </Link>
                         {
                             this.props.auth ?
                                 null
                                 : <Link to="/signup">
-                                    <button className="btn btn-outline-success my-2 my-sm-0">Registrarse</button>
+                                    <button className="btn btn-outline-success my-2 my-sm-0 btn-navbar">Registrarse</button>
                                 </Link>
                         }
                         {
                             this.props.auth ?
-                                <button className="btn btn-success my-2 my-sm-0" onClick={this.props.logout}>Salir</button>
+                                <button className="btn btn-success my-2 my-sm-0 btn-navbar"
+                                        onClick={this.props.logout}>Salir</button>
                                 : <Link to="/login">
-                                    <button className="btn btn-success my-2 my-sm-0">Iniciar Sesión</button>
+                                    <button className="btn btn-success btn-navbar">Iniciar Sesión</button>
                                 </Link>
                         }
-                    </form>
+                    </div>
                 </div>
             </nav>
         );

@@ -25,14 +25,6 @@ exports.signupUser = (req, res, next) => {
                     lastname: req.body.lastname,
                     email: req.body.email,
                 };
-                let ses = new AWS.SES({apiVersion: '2010-12-01'});
-                let params = {
-                    EmailAddress: req.body.email
-                };
-                ses.verifyEmailIdentity(params, function (err, data) {
-                    if (err) console.log(err, err.stack); // an error occurred
-                    else console.log(data);           // successful response
-                });
                 User.findOne({email: data.email})
                     .then((user) => {
                         user.updateOne({
@@ -109,4 +101,35 @@ exports.findUser = (req, res, next) => {
             });
         }
     })(req, res, next);
+};
+
+/**
+ * Method meant to insert a table into the database
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.insertTable = (req, res) => {
+    let tableId = req.params.tableId;
+    let name = req.body.name;
+    let seats = req.body.seats;
+    let availableSeats = req.body.availableSeats;
+    Table.findOne({TABLE_ID: tableId}).then((table)=>{
+        if(table){
+            return res.status(200).send(table);
+        }else{
+            let table = new Table();
+            table.TABLE_ID = table;
+            table.NAME = name;
+            table.SEATS = seats;
+            table.AVAILABLE_SEATS = availableSeats;
+            table.save((err)=>{
+                if (err)
+                    throw err;
+            })
+        }
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500).send({message:"Something went wrong with the db"});
+    });
 };

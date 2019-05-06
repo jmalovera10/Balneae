@@ -1,5 +1,12 @@
+/**----------
+SignIn Styles
+ ------------*/
 .login-card{
     margin-top: 20px;
     padding-top: 15px;
     padding-bottom: 15px;
+}
+
+.btn-navbar{
+    margin-left: 10px;
 }

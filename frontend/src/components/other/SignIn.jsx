@@ -155,7 +155,7 @@ export default class SignIn extends Component {
                         }
                         <div className="row justify-content-around">
                             <button type="submit"
-                                    className="btn btn-primary"
+                                    className="btn btn-success"
                                     onClick={this.props.isSignup ? this.handleSignup : this.handleLogin}>
                                 {this.props.isSignup ? "Registrarse" : "Entrar"}
                             </button>

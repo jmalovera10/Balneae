@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var entrySchema = mongoose.Schema({
+let entrySchema = mongoose.Schema({
     TABLE_ID: Number,
     NAME: String,
     SEATS: Object,

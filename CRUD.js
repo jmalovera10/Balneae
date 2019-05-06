@@ -104,6 +104,21 @@ exports.findUser = (req, res, next) => {
 };
 
 /**
+ * Method meant to retrieve all available tables from the database
+ * @param req
+ * @param res
+ * @param user
+ */
+exports.getTables = (req, res, user) => {
+    Table.find().then((tables)=>{
+        return res.status(200).json(tables);
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500).json({message:"Something went wrong with the db"})
+    });
+};
+
+/**
  * Method meant to insert a table into the database
  * @param req
  * @param res

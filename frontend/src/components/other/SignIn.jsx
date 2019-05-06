@@ -35,8 +35,7 @@ export default class SignIn extends Component {
                 if (data.auth) {
                     let cookies = new Cookies();
                     cookies.set("COMUNIAPP_TOKEN_COOKIE", data.token, {path: '/'});
-                    this.props.getContests();
-                    this.props.updateComponent();
+                    this.props.getTables();
                 }
             })
             .catch((err) => {

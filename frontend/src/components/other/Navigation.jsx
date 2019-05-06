@@ -14,7 +14,7 @@ class Navigation extends Component {
         super(props);
         this.state = {
             auth: false,
-            contests: [],
+            tables: [],
             user: null
         };
         this.updateAuth = this.updateAuth.bind(this);
@@ -85,12 +85,12 @@ class Navigation extends Component {
                             _id: data._id,
                         },
                         auth: true
-                    }, () => this.getContests());
+                    }, () => this.getTables());
 
                 })
                 .catch((err) => {
                     console.log(err);
-                    console.log("errror")
+                    console.log("errror");
                     cookies.remove("COMUNIAPP_TOKEN_COOKIE");
                     this.setState({
                         auth: false,
@@ -108,7 +108,7 @@ class Navigation extends Component {
                 <div className="content">
                     <Switch>
                         <Route exact path="/" render={() => this.state.auth ?
-                            <UserHome/>
+                            <UserHome tables={this.state.tables}/>
                             : <Home/>
                         }/>
                         <Route exact path="/login"

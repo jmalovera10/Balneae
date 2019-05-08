@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 let entrySchema = mongoose.Schema({
-    TABLE_ID: Number,
+    TABLE_ID: String,
     NAME: String,
     SEATS: Array,
     AVAILABLE_SEATS: Number,

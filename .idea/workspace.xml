@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cf123c83-3a82-46e8-a3d1-817a5592cd5b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CRUD.js" beforeDir="false" afterPath="$PROJECT_DIR$/CRUD.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -15,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CRUD.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="128" column="26" selection-start-line="128" selection-start-column="26" selection-end-line="128" selection-end-column="26" />
+            <state relative-caret-position="221">
+              <caret line="130" column="21" lean-forward="true" selection-start-line="130" selection-start-column="21" selection-end-line="130" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -78,7 +78,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/user/UserHome.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
+            <state relative-caret-position="204">
               <caret line="12" column="90" selection-start-line="12" selection-start-column="90" selection-end-line="12" selection-end-column="90" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
@@ -96,10 +96,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="103">
+            <state relative-caret-position="-556">
               <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
             </state>
           </provider>
@@ -154,8 +154,8 @@
         <option value="$PROJECT_DIR$/frontend/src/components/user/UserHome.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/other/Navigation.jsx" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/CRUD.js" />
         <option value="$PROJECT_DIR$/server.js" />
+        <option value="$PROJECT_DIR$/CRUD.js" />
       </list>
     </option>
   </component>
@@ -237,12 +237,12 @@
       <workItem from="1557172692428" duration="3265000" />
       <workItem from="1557258028226" duration="596000" />
       <workItem from="1557321213613" duration="1536000" />
-      <workItem from="1557347928964" duration="3469000" />
+      <workItem from="1557347928964" duration="4142000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19637000" />
+    <option name="totallyTimeSpent" value="20310000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -402,16 +402,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/user/UserHome.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="12" column="90" selection-start-line="12" selection-start-column="90" selection-end-line="12" selection-end-column="90" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/other/SignIn.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -443,17 +433,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CRUD.js">
+    <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="128" column="26" selection-start-line="128" selection-start-column="26" selection-end-line="128" selection-end-column="26" />
+        <state relative-caret-position="-556">
+          <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/user/UserHome.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
+        <state relative-caret-position="204">
+          <caret line="12" column="90" selection-start-line="12" selection-start-column="90" selection-end-line="12" selection-end-column="90" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CRUD.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="130" column="21" lean-forward="true" selection-start-line="130" selection-start-column="21" selection-end-line="130" selection-end-column="21" />
         </state>
       </provider>
     </entry>

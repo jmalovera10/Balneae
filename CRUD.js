@@ -126,7 +126,7 @@ exports.getTables = (req, res, user) => {
  */
 exports.getTableForModules = (req, res, user) => {
     let tableId = req.params.tableId;
-    Table.findById(tableId).then((tables)=>{
+    Table.findOne({TABLE_ID: tableId}).then((tables)=>{
         return res.status(200).json(tables);
     }).catch((err)=>{
         console.log(err);

@@ -58,16 +58,23 @@ app.get('/API/tables', passport.authenticate('jwt', {session: false}), (req, res
 });
 
 /**
+ * GET method that obtains a set of contests for a given user
+ */
+app.get('/API/module/table/:tableId', moduleMiddleware, (req, res) => {
+    CRUD.getTableForModules(req, res);
+});
+
+/**
  * POST method that updates a table state
  */
-app.post('/API/table/:tableId', moduleMiddleware, (req, res) => {
+app.post('/API/module/table/:tableId', moduleMiddleware, (req, res) => {
     CRUD.insertTable(req, res);
 });
 
 /**
  * POST method that updates a table state
  */
-app.post('/API/table/:tableId/seat/', moduleMiddleware, (req, res) => {
+app.post('/API/module/table/:tableId/seat/', moduleMiddleware, (req, res) => {
     CRUD.updateSeat(req, res);
 });
 

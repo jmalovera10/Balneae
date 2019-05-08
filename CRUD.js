@@ -140,6 +140,7 @@ exports.getTableForModules = (req, res, user) => {
  * @param res
  */
 exports.insertTable = (req, res) => {
+    console.log("INSERTION IN PROCESS");
     let tableId = req.params.tableId;
     let name = req.body.NAME;
     let seats = req.body.SEATS;

@@ -22,6 +22,8 @@ app.use(express.static(path.join(__dirname, '/contest_data')));
 app.use(passport.initialize());
 
 let moduleMiddleware = (req, res, next) => {
+    console.log(req.headers.authorization);
+    console.log(process.env.MODULE_TOKEN);
     if (req.headers.authorization.split(' ')[0] === process.env.MODULE_TOKEN) {
         next();
     } else {

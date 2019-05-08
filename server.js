@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, '/contest_data')));
 app.use(passport.initialize());
 
 let moduleMiddleware = (req, res, next) => {
-    if (req.body.token === process.env.MODULE_TOKEN) {
+    if (req.headers.authorization.split(' ')[0] === process.env.MODULE_TOKEN) {
         next();
     } else {
         return res.status(403).send("<h1>403: Unauthorized</h1>");
@@ -62,6 +62,13 @@ app.get('/API/tables', passport.authenticate('jwt', {session: false}), (req, res
  */
 app.post('/API/table/:tableId', moduleMiddleware, (req, res) => {
     CRUD.insertTable(req, res);
+});
+
+/**
+ * POST method that updates a table state
+ */
+app.post('/API/table/:tableId/seat/', moduleMiddleware, (req, res) => {
+    CRUD.updateSeat(req, res);
 });
 
 app.listen(process.env.PORT || 8081, () => {

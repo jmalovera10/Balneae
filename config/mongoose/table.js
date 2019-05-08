@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 let entrySchema = mongoose.Schema({
     TABLE_ID: Number,
     NAME: String,
-    SEATS: Object,
+    SEATS: Array,
     AVAILABLE_SEATS: Number,
 });
 

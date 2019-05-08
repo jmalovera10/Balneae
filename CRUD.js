@@ -122,13 +122,12 @@ exports.getTables = (req, res, user) => {
  * Method meant to insert a table into the database
  * @param req
  * @param res
- * @param next
  */
 exports.insertTable = (req, res) => {
     let tableId = req.params.tableId;
-    let name = req.body.name;
-    let seats = req.body.seats;
-    let availableSeats = req.body.availableSeats;
+    let name = req.body.NAME;
+    let seats = req.body.SEATS;
+    let availableSeats = req.body.AVAILABLE_SEATS;
     Table.findOne({TABLE_ID: tableId}).then((table)=>{
         if(table){
             return res.status(200).send(table);
@@ -141,7 +140,45 @@ exports.insertTable = (req, res) => {
             table.save((err)=>{
                 if (err)
                     throw err;
-            })
+            });
+        }
+    }).catch((err)=>{
+        console.log(err);
+        return res.status(500).send({message:"Something went wrong with the db"});
+    });
+};
+
+/**
+ * Method meant to insert a table into the database
+ * @param req
+ * @param res
+ */
+exports.updateSeat = (req, res) => {
+    let tableId = req.params.tableId;
+    let seatId = req.body.SEAT_ID;
+    let status = req.body.STATUS;
+    Table.findOne({TABLE_ID: tableId}).then((table)=>{
+        if(table){
+            let seats = table.SEATS;
+            let newSeats = [];
+            seats.forEach((s)=>{
+                if(s.SEAT_ID === seatId){
+                    newSeats.push({
+                       SEAT_ID: seatId,
+                       STATUS: status
+                    });
+                }else{
+                    newSeats.push(s);
+                }
+            });
+            table.SEATS = newSeats;
+            table.save((err)=>{
+                if (err)
+                    throw err;
+            });
+            return res.status(200).send(req.body);
+        }else{
+            return res.status(500).send({message: "Table doesn't exist"});
         }
     }).catch((err)=>{
         console.log(err);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import {NavLink, Route, Redirect, Switch} from 'react-router-dom'
+import {Route, Redirect, Switch} from 'react-router-dom'
 
 import Navbar from "./Navbar";
 import Home from "./Home";

@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-export default class UserHome extends Component{
+export default class UserHome extends Component {
 
     render() {
-        return(
+        return (
             <div>
                 {
-                    this.props.tables.length==0?
+                    this.props.tables.length === 0 ?
                         <div className="jumbotron">
                             <h1 className="display-4">Ooops!</h1>
                             <p className="lead">Parece que no hay mesas disponibles :(</p>
                         </div>
-                        :null
+                        : null
                 }
             </div>
         );

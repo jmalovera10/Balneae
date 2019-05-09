@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import PropTypes from 'prop-types';
 
 export default class Navbar extends Component {
@@ -11,29 +11,29 @@ export default class Navbar extends Component {
                         aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <Link to="/">
+                <NavLink to="/">
                     <button className="btn my-2 my-sm-0">Comuniapp</button>
-                </Link>
+                </NavLink>
 
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                     <div className="navbar-nav ml-auto">
-                        <Link to="/">
+                        <NavLink to="/">
                             <button className="btn my-2 my-sm-0 btn-navbar">Inicio</button>
-                        </Link>
+                        </NavLink>
                         {
                             this.props.auth ?
                                 null
-                                : <Link to="/signup">
+                                : <NavLink to="/signup">
                                     <button className="btn btn-outline-success my-2 my-sm-0 btn-navbar">Registrarse</button>
-                                </Link>
+                                </NavLink>
                         }
                         {
                             this.props.auth ?
                                 <button className="btn btn-success my-2 my-sm-0 btn-navbar"
                                         onClick={this.props.logout}>Salir</button>
-                                : <Link to="/login">
+                                : <NavLink to="/login">
                                     <button className="btn btn-success btn-navbar">Iniciar Sesión</button>
-                                </Link>
+                                </NavLink>
                         }
                     </div>
                 </div>

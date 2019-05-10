@@ -216,10 +216,12 @@ exports.insertTable = (req, res) => {
  * @param res
  */
 exports.updateSeat = (req, res) => {
+    console.log("UPDATE SET STARTED");
     let tableId = req.params.tableId;
     let seatId = req.body.SEAT_ID;
     let status = req.body.STATUS;
     Table.findOne({TABLE_ID: tableId}).then((table) => {
+        console.log(table);
         if (table) {
             let seats = table.SEATS;
             let newSeats = [];

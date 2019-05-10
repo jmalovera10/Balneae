@@ -233,6 +233,11 @@ exports.updateSeat = (req, res) => {
                     newSeats.push(s);
                 }
             });
+            if(status==='FREE'){
+                table.AVAILABLE_SEATS += 1;
+            }else{
+                table.AVAILABLE_SEATS -= 1;
+            }
             table.SEATS = newSeats;
             table.save((err) => {
                 if (err)

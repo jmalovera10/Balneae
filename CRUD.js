@@ -169,8 +169,8 @@ exports.reserveSeat = (req, res, user) => {
  */
 exports.getTableForModules = (req, res, user) => {
     let tableId = req.params.tableId;
-    Table.findOne({TABLE_ID: tableId}).then((tables) => {
-        return res.status(200).json(tables);
+    Table.findOne({TABLE_ID: tableId}).then((table) => {
+        return res.status(200).json({SEATS: table.SEATS});
     }).catch((err) => {
         console.log(err);
         return res.status(500).json({message: "Something went wrong with the db"})

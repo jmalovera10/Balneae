@@ -185,7 +185,6 @@ exports.getTableForModules = (req, res, user) => {
 exports.insertTable = (req, res) => {
     console.log("INSERTION IN PROCESS");
     let tableId = req.params.tableId;
-    console.log(tableId);
     let name = req.body.NAME;
     let seats = req.body.SEATS;
     let availableSeats = req.body.AVAILABLE_SEATS;
@@ -196,7 +195,7 @@ exports.insertTable = (req, res) => {
             return res.status(200).send(table);
         } else {
             let table = new Table();
-            table.TABLE_ID = table;
+            table.TABLE_ID = tableId;
             table.NAME = name;
             table.SEATS = seats;
             table.AVAILABLE_SEATS = availableSeats;

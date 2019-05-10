@@ -61,7 +61,7 @@ class Navigation extends Component {
             });
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.handleUser();
     }
 
@@ -90,7 +90,6 @@ class Navigation extends Component {
                 })
                 .catch((err) => {
                     console.log(err);
-                    console.log("errror");
                     cookies.remove("COMUNIAPP_TOKEN_COOKIE");
                     this.setState({
                         auth: false,

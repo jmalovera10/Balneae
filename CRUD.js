@@ -110,11 +110,54 @@ exports.findUser = (req, res, next) => {
  * @param user
  */
 exports.getTables = (req, res, user) => {
-    Table.find().then((tables)=>{
+    Table.find().then((tables) => {
         return res.status(200).json(tables);
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
-        return res.status(500).json({message:"Something went wrong with the db"})
+        return res.status(500).json({message: "Something went wrong with the db"})
+    });
+};
+
+/**
+ * Method meant to retrieve all available tables from the database
+ * @param req
+ * @param res
+ * @param user
+ */
+exports.reserveSeat = (req, res, user) => {
+    let userId = user._id;
+    let tableId = req.params.tableId;
+
+    Table.findById(tableId).then((table) => {
+        let seats = table.SEATS;
+        let occupied = false;
+        let seatId = undefined;
+        seats = seats.map((s) => {
+            if (s.STATUS === 'FREE' && !occupied) {
+                s.STATUS = 'RESERVED';
+                occupied = true;
+                seatId = s.SEAT_ID;
+                seats.AVAILABLE_SEATS -= 1;
+            }
+            return s;
+        });
+        table.SEATS = seats;
+        table.save();
+        User.findById(userId).then((user) => {
+            user.RESERVATION = {
+                TABLE_ID: tableId,
+                SEAT_ID: seatId
+            };
+            user.save();
+            return res.status(200).json({
+                tableId: tableId,
+                seatId: seatId,
+                reservationStatus: true
+            });
+        });
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({reservationStatus: false})
     });
 };
 
@@ -126,11 +169,11 @@ exports.getTables = (req, res, user) => {
  */
 exports.getTableForModules = (req, res, user) => {
     let tableId = req.params.tableId;
-    Table.findOne({TABLE_ID: tableId}).then((tables)=>{
+    Table.findOne({TABLE_ID: tableId}).then((tables) => {
         return res.status(200).json(tables);
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
-        return res.status(500).json({message:"Something went wrong with the db"})
+        return res.status(500).json({message: "Something went wrong with the db"})
     });
 };
 
@@ -145,24 +188,24 @@ exports.insertTable = (req, res) => {
     let name = req.body.NAME;
     let seats = req.body.SEATS;
     let availableSeats = req.body.AVAILABLE_SEATS;
-    Table.findOne({TABLE_ID: tableId}).then((table)=>{
-        if(table){
+    Table.findOne({TABLE_ID: tableId}).then((table) => {
+        if (table) {
             console.log(`Table found: ${table}`);
             return res.status(200).send(table);
-        }else{
+        } else {
             let table = new Table();
             table.TABLE_ID = table;
             table.NAME = name;
             table.SEATS = seats;
             table.AVAILABLE_SEATS = availableSeats;
-            table.save((err)=>{
+            table.save((err) => {
                 if (err)
                     throw err;
             });
         }
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
-        return res.status(500).send({message:"Something went wrong with the db"});
+        return res.status(500).send({message: "Something went wrong with the db"});
     });
 };
 
@@ -175,31 +218,31 @@ exports.updateSeat = (req, res) => {
     let tableId = req.params.tableId;
     let seatId = req.body.SEAT_ID;
     let status = req.body.STATUS;
-    Table.findOne({TABLE_ID: tableId}).then((table)=>{
-        if(table){
+    Table.findOne({TABLE_ID: tableId}).then((table) => {
+        if (table) {
             let seats = table.SEATS;
             let newSeats = [];
-            seats.forEach((s)=>{
-                if(s.SEAT_ID === seatId){
+            seats.forEach((s) => {
+                if (s.SEAT_ID === seatId) {
                     newSeats.push({
-                       SEAT_ID: seatId,
-                       STATUS: status
+                        SEAT_ID: seatId,
+                        STATUS: status
                     });
-                }else{
+                } else {
                     newSeats.push(s);
                 }
             });
             table.SEATS = newSeats;
-            table.save((err)=>{
+            table.save((err) => {
                 if (err)
                     throw err;
             });
             return res.status(200).send(req.body);
-        }else{
+        } else {
             return res.status(500).send({message: "Table doesn't exist"});
         }
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
-        return res.status(500).send({message:"Something went wrong with the db"});
+        return res.status(500).send({message: "Something went wrong with the db"});
     });
 };

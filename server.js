@@ -58,6 +58,13 @@ app.get('/API/tables', passport.authenticate('jwt', {session: false}), (req, res
 });
 
 /**
+ * POST method that makes a reservation
+ */
+app.post('/API/table/:tableId/seat', passport.authenticate('jwt', {session: false}), (req, res) => {
+    CRUD.reserveSeat(req, res, req.user);
+});
+
+/**
  * GET method that obtains a set of contests for a given user
  */
 app.get('/API/module/table/:tableId', moduleMiddleware, (req, res) => {

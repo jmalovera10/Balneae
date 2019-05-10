@@ -189,6 +189,7 @@ exports.insertTable = (req, res) => {
     let seats = req.body.SEATS;
     let availableSeats = req.body.AVAILABLE_SEATS;
     Table.findOne({TABLE_ID: tableId}).then((table) => {
+        console.log(table);
         if (table) {
             console.log(`Table found: ${table}`);
             return res.status(200).send(table);

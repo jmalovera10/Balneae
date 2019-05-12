@@ -16,11 +16,13 @@ class Navigation extends Component {
         this.state = {
             auth: false,
             tables: [],
+            reservation: null,
             user: null
         };
         this.updateAuth = this.updateAuth.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.getTables = this.getTables.bind(this);
+        this.getReservations = this.getReservations.bind(this);
         this.handleUser = this.handleUser.bind(this);
     }
 
@@ -62,6 +64,27 @@ class Navigation extends Component {
             });
     }
 
+    /**
+     * Method that gets all available tables
+     */
+    getReservations() {
+        let cookies = new Cookies();
+        let token = cookies.get("COMUNIAPP_TOKEN_COOKIE", {path: '/'});
+        let config = {
+            headers: {'Authorization': 'Bearer ' + token}
+        };
+        axios.get('/API/reservations', config)
+            .then((res) => {
+                return res.data;
+            })
+            .then((data) => {
+                this.setState({reservation: data})
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     componentWillMount() {
         this.handleUser();
     }
@@ -86,7 +109,10 @@ class Navigation extends Component {
                             _id: data._id,
                         },
                         auth: true
-                    }, () => this.getTables());
+                    }, () =>{
+                        this.getTables();
+                        this.getReservations();
+                    });
 
                 })
                 .catch((err) => {

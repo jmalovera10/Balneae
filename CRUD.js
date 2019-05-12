@@ -127,7 +127,7 @@ exports.getTables = (req, res, user) => {
  */
 exports.getReservations = (req, res, user) => {
     let userId = user._id;
-    Reservation.find({USER_ID: userId, STATUS: "ACTIVE", UNTIL: {$gte: Date.now()}}).then((reservations) => {
+    Reservation.findOne({USER_ID: userId, STATUS: "ACTIVE", UNTIL: {$gte: Date.now()}}).then((reservations) => {
         return res.status(200).json(reservations);
     }).catch((err) => {
         console.log(err);
@@ -149,6 +149,7 @@ exports.reserveSeat = (req, res, user) => {
 
         // Update seat status
         if (table) {
+            console.log(table);
             let seats = table.SEATS;
             let occupied = false;
             let seatId = undefined;
@@ -197,22 +198,27 @@ exports.cancelReservation = (req, res, user) => {
 
     Reservation.findOne({_id: reservationId, USER_ID: userId}).then((reservation) => {
         // Change reservation status to cancelled
-        reservation.STATUS = "CANCELLED";
-        reservation.save();
+        if(reservation) {
+            reservation.STATUS = "CANCELLED";
+            reservation.save();
 
-        // Update table status
-        Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
-            let seats = table.SEATS;
-            seats = seats.map((s) => {
-                if (s.SEAT_ID === reservation.SEAT_ID) {
-                    s.STATUS = "FREE";
-                    table.AVAILABLE_SEATS += 1;
-                }
+            // Update table status
+            Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
+                let seats = table.SEATS;
+                seats = seats.map((s) => {
+                    if (s.SEAT_ID === reservation.SEAT_ID) {
+                        s.STATUS = "FREE";
+                        table.AVAILABLE_SEATS += 1;
+                    }
+                    return s;
+                });
+                table.SEATS = seats;
+                table.save();
+                return res.status(200).json({reservationStatus: "CANCELLED"});
             });
-            table.SEATS = seats;
-            table.save();
-            return res.status(200).json({reservationStatus: "CANCELLED"});
-        });
+        }else{
+            return res.status(500).json({message: "Reservation doesn't exist"})
+        }
     }).catch((err) => {
         console.log(err);
         return res.status(500).json({message: "Something went wrong with the db"})

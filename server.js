@@ -60,8 +60,22 @@ app.get('/API/tables', passport.authenticate('jwt', {session: false}), (req, res
 /**
  * POST method that makes a reservation
  */
-app.post('/API/table/:tableId/seat', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/API/reservations', passport.authenticate('jwt', {session: false}), (req, res) => {
+    CRUD.getReservations(req, res, req.user);
+});
+
+/**
+ * POST method that makes a reservation
+ */
+app.post('/API/reservation/table/:tableId', passport.authenticate('jwt', {session: false}), (req, res) => {
     CRUD.reserveSeat(req, res, req.user);
+});
+
+/**
+ * POST method that makes a reservation
+ */
+app.delete('/API/reservation/:reservationId', passport.authenticate('jwt', {session: false}), (req, res) => {
+    CRUD.cancelReservation(req, res, req.user);
 });
 
 /**
@@ -81,7 +95,7 @@ app.post('/API/module/table/:tableId', moduleMiddleware, (req, res) => {
 /**
  * POST method that updates a table state
  */
-app.post('/API/module/table/:tableId/seat/', moduleMiddleware, (req, res) => {
+app.post('/API/module/table/:tableId/seat', moduleMiddleware, (req, res) => {
     CRUD.updateSeat(req, res);
 });
 

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const User = require('./config/mongoose/conf');
 const Table = require('./config/mongoose/table');
+const Reservation = require('./config/mongoose/reservation');
 
 /**
  * Method meant to register a user
@@ -119,7 +120,23 @@ exports.getTables = (req, res, user) => {
 };
 
 /**
- * Method meant to retrieve all available tables from the database
+ * Method meant to get all reservations
+ * @param req
+ * @param res
+ * @param user
+ */
+exports.getReservations = (req, res, user) => {
+    let userId = user._id;
+    Reservation.find({USER_ID: userId, STATUS: "ACTIVE", UNTIL: {$gte: Date.now()}}).then((reservations) => {
+        return res.status(200).json(reservations);
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({message: "Something went wrong with the db"})
+    });
+};
+
+/**
+ * Method meant to reserve a seat
  * @param req
  * @param res
  * @param user
@@ -128,36 +145,77 @@ exports.reserveSeat = (req, res, user) => {
     let userId = user._id;
     let tableId = req.params.tableId;
 
-    Table.findById(tableId).then((table) => {
-        let seats = table.SEATS;
-        let occupied = false;
-        let seatId = undefined;
-        seats = seats.map((s) => {
-            if (s.STATUS === 'FREE' && !occupied) {
-                s.STATUS = 'RESERVED';
-                occupied = true;
-                seatId = s.SEAT_ID;
-                seats.AVAILABLE_SEATS -= 1;
-            }
-            return s;
-        });
-        table.SEATS = seats;
-        table.save();
-        User.findById(userId).then((user) => {
-            user.RESERVATION = {
-                TABLE_ID: tableId,
-                SEAT_ID: seatId
-            };
-            user.save();
-            return res.status(200).json({
-                tableId: tableId,
-                seatId: seatId,
-                reservationStatus: true
+    Table.findOne({TABLE_ID: tableId}).then((table) => {
+
+        // Update seat status
+        if (table) {
+            let seats = table.SEATS;
+            let occupied = false;
+            let seatId = undefined;
+            seats = seats.map((s) => {
+                if (s.STATUS === 'FREE' && !occupied) {
+                    s.STATUS = 'RESERVED';
+                    occupied = true;
+                    seatId = s.SEAT_ID;
+                    table.AVAILABLE_SEATS -= 1;
+                }
+                return s;
             });
+            table.SEATS = seats;
+            table.save();
+
+            // Save reservation
+            let reservation = Reservation();
+            reservation.TABLE_ID = tableId;
+            reservation.SEAT_ID = seatId;
+            reservation.USER_ID = userId;
+            reservation.STATUS = "ACTIVE";
+            reservation.UNTIL = Date.now() + 300000;
+
+            reservation.save();
+
+            return res.status(200).json({reservationStatus: true, reservation: reservation});
+        } else {
+            return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
+        }
+
+    }).catch((err) => {
+        console.log(err);
+        return res.status(500).json({reservationStatus: false});
+    });
+};
+
+/**
+ * Method meant to get all reservations
+ * @param req
+ * @param res
+ * @param user
+ */
+exports.cancelReservation = (req, res, user) => {
+    let userId = user._id;
+    let reservationId = req.params.reservationId;
+
+    Reservation.findOne({_id: reservationId, USER_ID: userId}).then((reservation) => {
+        // Change reservation status to cancelled
+        reservation.STATUS = "CANCELLED";
+        reservation.save();
+
+        // Update table status
+        Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
+            let seats = table.SEATS;
+            seats = seats.map((s) => {
+                if (s.SEAT_ID === reservation.SEAT_ID) {
+                    s.STATUS = "FREE";
+                    table.AVAILABLE_SEATS += 1;
+                }
+            });
+            table.SEATS = seats;
+            table.save();
+            return res.status(200).json({reservationStatus: "CANCELLED"});
         });
     }).catch((err) => {
         console.log(err);
-        return res.status(500).json({reservationStatus: false})
+        return res.status(500).json({message: "Something went wrong with the db"})
     });
 };
 
@@ -203,6 +261,7 @@ exports.insertTable = (req, res) => {
                 if (err)
                     throw err;
             });
+            return res.status(200).send(table);
         }
     }).catch((err) => {
         console.log(err);
@@ -235,9 +294,9 @@ exports.updateSeat = (req, res) => {
                     newSeats.push(s);
                 }
             });
-            if(status==='FREE'){
+            if (status === 'FREE') {
                 table.AVAILABLE_SEATS += 1;
-            }else{
+            } else {
                 table.AVAILABLE_SEATS -= 1;
             }
             table.SEATS = newSeats;

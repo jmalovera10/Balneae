@@ -7,6 +7,7 @@ import Navbar from "./Navbar";
 import Home from "./Home";
 import UserHome from "../user/UserHome";
 import SignIn from "./SignIn";
+import ReservationScreen from "../user/ReservationScreen";
 
 class Navigation extends Component {
 
@@ -118,6 +119,8 @@ class Navigation extends Component {
                                render={() => (this.state.auth ? <Redirect to='/'/> :
                                    <SignIn isSignup={true} handleUser={this.handleUser} updateAuth={this.updateAuth}
                                            getTables={this.getTables}/>)}/>
+                        <Route exact path="/reservation"
+                               render={() => (this.state.auth ? <ReservationScreen user={this.state.user}/> : <Redirect to='/'/>)}/>
                     </Switch>
                 </div>
             </div>

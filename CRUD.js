@@ -18,15 +18,19 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
                 r.save();
                 Table.findOne({TABLE_ID: r.TABLE_ID})
                     .then((t) => {
-                        let seats = t.SEATS;
-                        console.log(seats);
-                        seats = seats.map((s) => {
+                        let seats = [];
+                        t.SEATS.forEach((s) => {
                             if (s.SEAT_ID === r.SEAT_ID) {
-                                s.STATUS = "FREE";
+                                seats.push({
+                                    SEAT_ID: s.SEAT_ID,
+                                    STATUS: "FREE"
+                                });
                                 t.AVAILABLE_SEATS += 1;
+                            }else {
+                                seats.push(s);
                             }
-                            return s;
                         });
+                        console.log(seats);
                         t.SEATS = seats;
                         t.save();
                     });

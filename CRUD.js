@@ -187,10 +187,10 @@ exports.reserveSeat = (req, res, user) => {
 
         // Update seat status
         if (table && table.AVAILABLE_SEATS > 0) {
-            let seats = table.SEATS;
+            let seats = [];
             let occupied = false;
             let seatId = undefined;
-            seats = seats.map((s) => {
+            table.SEATS.forEach((s) => {
                 if (s.STATUS === 'FREE' && !occupied) {
                     console.log("DONE IN HERE");
                     s.STATUS = 'RESERVED';
@@ -198,7 +198,7 @@ exports.reserveSeat = (req, res, user) => {
                     seatId = s.SEAT_ID;
                     table.AVAILABLE_SEATS -= 1;
                 }
-                return s;
+                seats.push(s);
             });
             table.SEATS = seats;
             console.log(table.SEATS);
@@ -243,13 +243,13 @@ exports.cancelReservation = (req, res, user) => {
 
             // Update table status
             Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
-                let seats = table.SEATS;
-                seats = seats.map((s) => {
+                let seats = [];
+                table.SEATS.forEach((s) => {
                     if (s.SEAT_ID === reservation.SEAT_ID) {
                         s.STATUS = "FREE";
                         table.AVAILABLE_SEATS += 1;
                     }
-                    return s;
+                    seats.push(s);
                 });
                 table.SEATS = seats;
                 table.save();

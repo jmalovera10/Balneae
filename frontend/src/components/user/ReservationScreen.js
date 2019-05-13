@@ -12,8 +12,8 @@ export default class ReservationScreen extends Component {
         return (
             <div className="row justify-content-around reservation-body">
                 <div className="col-sm-auto">
-                    <h1>Hola {this.props.user.name}!</h1>
-                    <h3>Tu reserva te espera! Debes llegar antes de las</h3>
+                    <h1>Hola {this.props.user?this.props.user.name:null}!</h1>
+                    <h3>Tu reserva en {this.props.table?this.props.table.NAME:"uniandes"} te espera! Debes llegar antes de las</h3>
                     <div className="row justify-content-around">
                         <h2>{hours}:{minutes<10?'0':null}{minutes} {hours >= 12 ? 'pm' : 'am'}</h2>
                     </div>

@@ -202,12 +202,7 @@ exports.reserveSeat = (req, res, user) => {
             });
             table.SEATS = seats;
             console.log(table);
-            table.save((err)=>{
-                if(err){
-                    console.log(err);
-                }
-                console.log("TABLE SAVED");
-            });
+            Table.updateOne({TABLE_ID: table.TABLE_ID},{$set:{SEATS:seats, AVAILABLE_SEATS: table.AVAILABLE_SEATS}});
 
             // Save reservation
             let reservation = Reservation();
@@ -217,11 +212,10 @@ exports.reserveSeat = (req, res, user) => {
             reservation.STATUS = "ACTIVE";
             reservation.UNTIL = Date.now() + 300000;
 
-            reservation.save((err)=>{
-                if(err){
+            reservation.save((err) => {
+                if (err) {
                     console.log(err);
                 }
-                console.log("TABLE SAVED");
             });
 
             return res.status(200).json({reservationStatus: true, reservation: reservation});
@@ -263,12 +257,7 @@ exports.cancelReservation = (req, res, user) => {
                 });
                 table.SEATS = seats;
                 console.log(table);
-                table.save((err)=>{
-                    if(err){
-                        console.log(err);
-                    }
-                    console.log("TABLE SAVED");
-                });
+                Table.updateOne({TABLE_ID: reservation.TABLE_ID},{$set:{SEATS:seats, AVAILABLE_SEATS: table.AVAILABLE_SEATS}});
                 return res.status(200).json({reservationStatus: "CANCELLED"});
             });
         } else {

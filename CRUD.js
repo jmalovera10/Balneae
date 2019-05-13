@@ -20,7 +20,7 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
                     .then((t) => {
                         let seats = [];
                         t.SEATS.forEach((s) => {
-                            if (s.SEAT_ID === r.SEAT_ID) {
+                            if (Number(s.SEAT_ID) === Number(r.SEAT_ID)) {
                                 seats.push({
                                     SEAT_ID: s.SEAT_ID,
                                     STATUS: "FREE"
@@ -30,7 +30,6 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
                                 seats.push(s);
                             }
                         });
-                        console.log(seats);
                         t.SEATS = seats;
                         t.save();
                     });

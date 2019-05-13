@@ -5,6 +5,43 @@ const User = require('./config/mongoose/conf');
 const Table = require('./config/mongoose/table');
 const Reservation = require('./config/mongoose/reservation');
 
+// ASYNCHRONOUS DB UPDATING
+const Agenda = require('agenda');
+const agenda = new Agenda({db: {address: process.env.MONGO_URL}});
+
+agenda.define('UPDATE RESERVATION STATUS', () => {
+    console.log("RESERVATIONS UPDATED");
+    Reservation.find({STATUS: "ACTIVE", UNTIL: {$lt: Date.now()}})
+        .then((reservations) => {
+            reservations.forEach((r) => {
+                r.STATUS = "TIMEOUT";
+                r.save();
+                Table.find({TABLE_ID: r.TABLE_ID})
+                    .then((t)=>{
+                        let seats = t.SEATS;
+                        seats = seats.map((s)=>{
+                            if(s.SEAT_ID === r.SEAT_ID){
+                                s.STATUS = "FREE";
+                                t.AVAILABLE_SEATS += 1;
+                            }
+                            return s;
+                        });
+                        t.SEATS = seats;
+                        t.save();
+                    });
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+(async function () { // IIFE to give access to async/await
+    await agenda.start();
+    await agenda.every('0.5 minutes', 'UPDATE RESERVATION STATUS');
+    console.log("STARTING AGENDA");
+})();
+
 /**
  * Method meant to register a user
  * @param req
@@ -198,7 +235,7 @@ exports.cancelReservation = (req, res, user) => {
 
     Reservation.findOne({_id: reservationId, USER_ID: userId}).then((reservation) => {
         // Change reservation status to cancelled
-        if(reservation) {
+        if (reservation) {
             reservation.STATUS = "CANCELLED";
             reservation.save();
 
@@ -216,7 +253,7 @@ exports.cancelReservation = (req, res, user) => {
                 table.save();
                 return res.status(200).json({reservationStatus: "CANCELLED"});
             });
-        }else{
+        } else {
             return res.status(500).json({message: "Reservation doesn't exist"})
         }
     }).catch((err) => {

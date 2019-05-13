@@ -23,6 +23,8 @@ class Navigation extends Component {
         this.handleLogout = this.handleLogout.bind(this);
         this.getTables = this.getTables.bind(this);
         this.getReservations = this.getReservations.bind(this);
+        this.makeReservation = this.makeReservation.bind(this);
+        this.cancelReservation = this.cancelReservation.bind(this);
         this.handleUser = this.handleUser.bind(this);
     }
 
@@ -85,6 +87,50 @@ class Navigation extends Component {
             });
     }
 
+    makeReservation(tableId, rProps) {
+        let cookies = new Cookies();
+        let token = cookies.get("COMUNIAPP_TOKEN_COOKIE", {path: '/'});
+        console.log(token);
+        if (token) {
+            let config = {
+                headers: {'Authorization': 'Bearer ' + token}
+            };
+            axios.post(`/API/reservation/table/${tableId}`, {}, config)
+                .then((res) => {
+                    return res.data;
+                })
+                .then((res) => {
+                    this.setState({
+                        reservation: res.reservation
+                    }, () => {
+                        rProps.history.push('/reservation')
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+    }
+
+    cancelReservation(rProps) {
+        let cookies = new Cookies();
+        let token = cookies.get("COMUNIAPP_TOKEN_COOKIE", {path: '/'});
+        if (token) {
+            let config = {
+                headers: {'Authorization': 'Bearer ' + token}
+            };
+            axios.delete(`/API/reservation/${this.state.reservation._id}`, config)
+                .then((res) => {
+                    this.setState({reservation: undefined});
+                    rProps.history.push('/')
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+
+    }
+
     componentWillMount() {
         this.handleUser();
     }
@@ -109,7 +155,7 @@ class Navigation extends Component {
                             _id: data._id,
                         },
                         auth: true
-                    }, () =>{
+                    }, () => {
                         this.getTables();
                         this.getReservations();
                     });
@@ -128,13 +174,21 @@ class Navigation extends Component {
     }
 
     render() {
+        let reservationTable = undefined;
+        if (this.state.tables) {
+            reservationTable = this.state.tables.filter((t) => {
+                return (this.state.reservation && this.state.reservation.TABLE_ID === t.TABLE_ID);
+            });
+        }
         return (
             <div id="navigation">
                 <Navbar auth={this.state.auth} logout={this.handleLogout}/>
                 <div className="content">
                     <Switch>
-                        <Route exact path="/" render={() => this.state.auth ?
-                            <UserHome tables={this.state.tables}/>
+                        <Route exact path="/" render={(rProps) => this.state.auth ?
+                            <UserHome tables={this.state.tables} reservation={this.state.reservation}
+                                      cancelReservation={this.cancelReservation} rProps={rProps}
+                                      makeReservation={this.makeReservation}/>
                             : <Home/>
                         }/>
                         <Route exact path="/login"
@@ -146,7 +200,11 @@ class Navigation extends Component {
                                    <SignIn isSignup={true} handleUser={this.handleUser} updateAuth={this.updateAuth}
                                            getTables={this.getTables}/>)}/>
                         <Route exact path="/reservation"
-                               render={() => (this.state.auth ? <ReservationScreen user={this.state.user}/> : <Redirect to='/'/>)}/>
+                               render={(rProps) => (this.state.auth ?
+                                   <ReservationScreen cancelReservation={this.cancelReservation} rProps={rProps}
+                                                      reservation={this.state.reservation} user={this.state.user}
+                                                      table={reservationTable[0]}/> :
+                                   <Redirect to='/'/>)}/>
                     </Switch>
                 </div>
             </div>

@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 
 import "./Table.css";
 
 export default class Table extends Component {
 
-    makeReservation(){
+    makeReservation() {
         console.log(this.props.table);
-        this.props.makeReservation(this.props.table.TABLE_ID);
+        this.props.makeReservation(this.props.table.TABLE_ID, this.props.rProps);
+    }
+
+    cancelReservation() {
+        console.log(this.props.table);
+        this.props.cancelReservation(this.props.rProps);
     }
 
     render() {
@@ -31,16 +37,31 @@ export default class Table extends Component {
                             <div className="row justify-content-around">
                                 {
                                     this.props.hasReservation ?
-                                        (this.props.tableReservationId ?
-                                                <button className="btn btn-danger" onClick={this.props.cancelReservation}>
-                                                    Cancelar Reserva
-                                                </button>
+                                        (this.props.table && this.props.reservation && this.props.reservation.TABLE_ID === this.props.table.TABLE_ID ?
+                                                <div className="row justify-content-around">
+                                                    <div className="col-sm-6">
+                                                        <Link to="/reservation">
+                                                            <button className="btn btn-success">
+                                                                Ver Reserva
+                                                            </button>
+                                                        </Link>
+                                                    </div>
+                                                    <div className="col-sm-6">
+                                                        <button className="btn btn-danger"
+                                                                onClick={this.cancelReservation.bind(this)}>
+                                                            Cancelar Reserva
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 :
                                                 <button disabled={true} className="btn btn-success">
                                                     Reservar Silla
                                                 </button>
                                         )
-                                        : <button className="btn btn-success" onClick={this.makeReservation.bind(this)}>
+                                        :
+                                        <button className="btn btn-success"
+                                                disabled={this.props.table.AVAILABLE_SEATS === 0}
+                                                onClick={this.makeReservation.bind(this)}>
                                             Reservar Silla
                                         </button>
                                 }

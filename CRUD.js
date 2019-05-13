@@ -192,11 +192,13 @@ exports.reserveSeat = (req, res, user) => {
             let seatId = undefined;
             table.SEATS.forEach((s) => {
                 if (s.STATUS === 'FREE' && !occupied) {
-                    console.log("DONE IN HERE");
-                    s.STATUS = 'RESERVED';
                     occupied = true;
                     seatId = s.SEAT_ID;
                     table.AVAILABLE_SEATS -= 1;
+                    seats.push({
+                        SEAT_ID: s.SEAT_ID,
+                        STATUS: 'RESERVED'
+                    });
                 }
                 seats.push(s);
             });
@@ -252,13 +254,16 @@ exports.cancelReservation = (req, res, user) => {
             Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
                 let seats = [];
                 table.SEATS.forEach((s) => {
-                    if (s.SEAT_ID === reservation.SEAT_ID) {
-                        console.log("DONE IN HERE");
-                        s.STATUS = "FREE";
-                        table.AVAILABLE_SEATS += 1;
+                    if (Number(s.SEAT_ID) === Number(reservation.SEAT_ID)) {
+                        seats.push({
+                            SEAT_ID: reservation.SEAT_ID,
+                            STATUS: "FREE"
+                        })
+                    }else{
+                        seats.push(s);
                     }
-                    seats.push(s);
                 });
+                table.AVAILABLE_SEATS += 1;
                 table.SEATS = seats;
                 console.log(table);
                 table.save((err)=>{

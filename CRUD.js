@@ -199,8 +199,9 @@ exports.reserveSeat = (req, res, user) => {
                         SEAT_ID: s.SEAT_ID,
                         STATUS: 'RESERVED'
                     });
+                }else{
+                    seats.push(s);
                 }
-                seats.push(s);
             });
             table.SEATS = seats;
             table.save((err)=>{

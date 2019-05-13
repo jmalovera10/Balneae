@@ -252,6 +252,7 @@ exports.cancelReservation = (req, res, user) => {
                     seats.push(s);
                 });
                 table.SEATS = seats;
+                console.log(table);
                 table.save();
                 return res.status(200).json({reservationStatus: "CANCELLED"});
             });

@@ -247,7 +247,7 @@ exports.cancelReservation = (req, res, user) => {
         // Change reservation status to cancelled
         if (reservation) {
             reservation.STATUS = "CANCELLED";
-
+            reservation.save();
             // Update table status
             Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
                 let seats = [];

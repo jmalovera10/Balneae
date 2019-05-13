@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cf123c83-3a82-46e8-a3d1-817a5592cd5b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/user/ReservationScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/user/ReservationScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CRUD.js" beforeDir="false" afterPath="$PROJECT_DIR$/CRUD.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -16,18 +15,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CRUD.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="274" column="41" selection-start-line="274" selection-start-column="41" selection-end-line="274" selection-end-column="41" />
+            <state relative-caret-position="243">
+              <caret line="203" column="35" selection-start-line="203" selection-start-column="35" selection-end-line="203" selection-end-column="35" />
               <folding>
                 <element signature="e#1730#2999#0" />
                 <element signature="e#3125#3887#0" />
                 <element signature="e#4030#4601#0" />
                 <element signature="e#4762#4987#0" />
                 <element signature="e#5127#5462#0" />
-                <element signature="e#5592#6973#0" />
+                <element signature="e#7115#8274#0" />
               </folding>
             </state>
           </provider>
@@ -57,7 +56,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/user/ReservationScreen.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="158">
@@ -168,8 +167,8 @@
         <option value="$PROJECT_DIR$/frontend/src/components/user/Table.js" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/other/Navigation.jsx" />
-        <option value="$PROJECT_DIR$/CRUD.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/user/ReservationScreen.js" />
+        <option value="$PROJECT_DIR$/CRUD.js" />
       </list>
     </option>
   </component>
@@ -285,12 +284,12 @@
       <workItem from="1557591280784" duration="828000" />
       <workItem from="1557676321761" duration="5098000" />
       <workItem from="1557706141222" duration="11120000" />
-      <workItem from="1557752073124" duration="2651000" />
+      <workItem from="1557752073124" duration="3093000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56338000" />
+    <option name="totallyTimeSpent" value="56780000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -482,13 +481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/mongoose/table.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="17" lean-forward="true" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -540,21 +532,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CRUD.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="274" column="41" selection-start-line="274" selection-start-column="41" selection-end-line="274" selection-end-column="41" />
-          <folding>
-            <element signature="e#1730#2999#0" />
-            <element signature="e#3125#3887#0" />
-            <element signature="e#4030#4601#0" />
-            <element signature="e#4762#4987#0" />
-            <element signature="e#5127#5462#0" />
-            <element signature="e#5592#6973#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/other/Navigation.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1049">
@@ -565,12 +542,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/mongoose/table.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="17" lean-forward="true" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/user/ReservationScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="158">
           <caret line="15" column="87" selection-start-line="15" selection-start-column="87" selection-end-line="15" selection-end-column="87" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CRUD.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="203" column="35" selection-start-line="203" selection-start-column="35" selection-end-line="203" selection-end-column="35" />
+          <folding>
+            <element signature="e#1730#2999#0" />
+            <element signature="e#3125#3887#0" />
+            <element signature="e#4030#4601#0" />
+            <element signature="e#4762#4987#0" />
+            <element signature="e#5127#5462#0" />
+            <element signature="e#7115#8274#0" />
           </folding>
         </state>
       </provider>

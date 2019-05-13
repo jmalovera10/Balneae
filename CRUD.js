@@ -201,6 +201,7 @@ exports.reserveSeat = (req, res, user) => {
                 return s;
             });
             table.SEATS = seats;
+            console.log(table.SEATS);
             table.save();
 
             // Save reservation

@@ -201,7 +201,7 @@ exports.reserveSeat = (req, res, user) => {
                 seats.push(s);
             });
             table.SEATS = seats;
-            table.save((err)=>{
+            Table.save(table,(err)=>{
                 if(err){
                     console.log(err);
                     return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
@@ -261,7 +261,7 @@ exports.cancelReservation = (req, res, user) => {
                 });
                 table.SEATS = seats;
                 console.log(table);
-                table.save((err)=>{
+                Table.save(table,(err)=>{
                     if(err){
                         console.log(err);
                         return res.status(500).json({message: "Reservation doesn't exist"});

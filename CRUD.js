@@ -201,13 +201,14 @@ exports.reserveSeat = (req, res, user) => {
                 seats.push(s);
             });
             table.SEATS = seats;
-            console.log(table);
             table.save((err)=>{
                 if(err){
                     console.log(err);
                 }
                 console.log("TABLE SAVED");
             });
+
+            console.log(table);
 
             // Save reservation
             let reservation = Reservation();
@@ -248,13 +249,15 @@ exports.cancelReservation = (req, res, user) => {
         // Change reservation status to cancelled
         if (reservation) {
             reservation.STATUS = "CANCELLED";
-            reservation.save();
 
             // Update table status
             Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
                 let seats = [];
+                console.log(`RESERVATION: ${reservation.SEAT_ID}`);
                 table.SEATS.forEach((s) => {
+                    console.log(`SEATS: ${s.SEAT_ID}`);
                     if (s.SEAT_ID === reservation.SEAT_ID) {
+                        console.log("DONE IN HERE");
                         s.STATUS = "FREE";
                         table.AVAILABLE_SEATS += 1;
                     }

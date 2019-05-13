@@ -17,11 +17,11 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
                 r.STATUS = "TIMEOUT";
                 r.save();
                 Table.findOne({TABLE_ID: r.TABLE_ID})
-                    .then((t)=>{
+                    .then((t) => {
                         let seats = t.SEATS;
                         console.log(seats);
-                        seats = seats.map((s)=>{
-                            if(s.SEAT_ID === r.SEAT_ID){
+                        seats = seats.map((s) => {
+                            if (s.SEAT_ID === r.SEAT_ID) {
                                 s.STATUS = "FREE";
                                 t.AVAILABLE_SEATS += 1;
                             }
@@ -186,13 +186,13 @@ exports.reserveSeat = (req, res, user) => {
     Table.findOne({TABLE_ID: tableId}).then((table) => {
 
         // Update seat status
-        if (table) {
-            console.log(table);
+        if (table && table.AVAILABLE_SEATS > 0) {
             let seats = table.SEATS;
             let occupied = false;
             let seatId = undefined;
             seats = seats.map((s) => {
                 if (s.STATUS === 'FREE' && !occupied) {
+                    console.log("DONE IN HERE");
                     s.STATUS = 'RESERVED';
                     occupied = true;
                     seatId = s.SEAT_ID;
@@ -292,9 +292,7 @@ exports.insertTable = (req, res) => {
     let seats = req.body.SEATS;
     let availableSeats = req.body.AVAILABLE_SEATS;
     Table.findOne({TABLE_ID: tableId}).then((table) => {
-        console.log(table);
         if (table) {
-            console.log(`Table found: ${table}`);
             return res.status(200).send(table);
         } else {
             let table = new Table();

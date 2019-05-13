@@ -206,6 +206,7 @@ exports.reserveSeat = (req, res, user) => {
                 if(err){
                     console.log(err);
                 }
+                console.log("TABLE SAVED");
             });
 
             // Save reservation
@@ -220,6 +221,7 @@ exports.reserveSeat = (req, res, user) => {
                 if(err){
                     console.log(err);
                 }
+                console.log("TABLE SAVED");
             });
 
             return res.status(200).json({reservationStatus: true, reservation: reservation});
@@ -265,6 +267,7 @@ exports.cancelReservation = (req, res, user) => {
                     if(err){
                         console.log(err);
                     }
+                    console.log("TABLE SAVED");
                 });
                 return res.status(200).json({reservationStatus: "CANCELLED"});
             });

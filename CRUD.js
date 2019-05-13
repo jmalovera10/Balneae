@@ -204,27 +204,25 @@ exports.reserveSeat = (req, res, user) => {
             table.save((err)=>{
                 if(err){
                     console.log(err);
+                    return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
                 }
-                console.log("TABLE SAVED");
+                // Save reservation
+                let reservation = Reservation();
+                reservation.TABLE_ID = tableId;
+                reservation.SEAT_ID = seatId;
+                reservation.USER_ID = userId;
+                reservation.STATUS = "ACTIVE";
+                reservation.UNTIL = Date.now() + 300000;
+
+                reservation.save((err)=>{
+                    if(err){
+                        console.log(err);
+                        return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
+                    }
+                    return res.status(200).json({reservationStatus: true, reservation: reservation});
+                });
             });
 
-            console.log(table);
-
-            // Save reservation
-            let reservation = Reservation();
-            reservation.TABLE_ID = tableId;
-            reservation.SEAT_ID = seatId;
-            reservation.USER_ID = userId;
-            reservation.STATUS = "ACTIVE";
-            reservation.UNTIL = Date.now() + 300000;
-
-            reservation.save((err)=>{
-                if(err){
-                    console.log(err);
-                }
-            });
-
-            return res.status(200).json({reservationStatus: true, reservation: reservation});
         } else {
             return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
         }
@@ -253,9 +251,7 @@ exports.cancelReservation = (req, res, user) => {
             // Update table status
             Table.findOne({TABLE_ID: reservation.TABLE_ID}).then((table) => {
                 let seats = [];
-                console.log(`RESERVATION: ${reservation.SEAT_ID}`);
                 table.SEATS.forEach((s) => {
-                    console.log(`SEATS: ${s.SEAT_ID}`);
                     if (s.SEAT_ID === reservation.SEAT_ID) {
                         console.log("DONE IN HERE");
                         s.STATUS = "FREE";
@@ -268,13 +264,13 @@ exports.cancelReservation = (req, res, user) => {
                 table.save((err)=>{
                     if(err){
                         console.log(err);
+                        return res.status(500).json({message: "Reservation doesn't exist"});
                     }
-                    console.log("TABLE SAVED");
+                    return res.status(200).json({reservationStatus: "CANCELLED"});
                 });
-                return res.status(200).json({reservationStatus: "CANCELLED"});
             });
         } else {
-            return res.status(500).json({message: "Reservation doesn't exist"})
+            return res.status(500).json({message: "Reservation doesn't exist"});
         }
     }).catch((err) => {
         console.log(err);

@@ -16,9 +16,10 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
             reservations.forEach((r) => {
                 r.STATUS = "TIMEOUT";
                 r.save();
-                Table.find({TABLE_ID: r.TABLE_ID})
+                Table.findOne({TABLE_ID: r.TABLE_ID})
                     .then((t)=>{
                         let seats = t.SEATS;
+                        console.log(seats);
                         seats = seats.map((s)=>{
                             if(s.SEAT_ID === r.SEAT_ID){
                                 s.STATUS = "FREE";
@@ -271,7 +272,7 @@ exports.cancelReservation = (req, res, user) => {
 exports.getTableForModules = (req, res, user) => {
     let tableId = req.params.tableId;
     Table.findOne({TABLE_ID: tableId}).then((table) => {
-        return res.status(200).json({SEATS: table.SEATS});
+        return res.status(200).json(table);
     }).catch((err) => {
         console.log(err);
         return res.status(500).json({message: "Something went wrong with the db"})

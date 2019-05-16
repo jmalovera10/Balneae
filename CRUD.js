@@ -26,7 +26,7 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
                                     STATUS: "FREE"
                                 });
                                 t.AVAILABLE_SEATS += 1;
-                            }else {
+                            } else {
                                 seats.push(s);
                             }
                         });
@@ -45,6 +45,10 @@ agenda.define('UPDATE RESERVATION STATUS', () => {
     await agenda.every('0.5 minutes', 'UPDATE RESERVATION STATUS');
     console.log("STARTING AGENDA");
 })();
+
+
+let AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
 
 /**
  * Method meant to register a user
@@ -67,6 +71,14 @@ exports.signupUser = (req, res, next) => {
                     lastname: req.body.lastname,
                     email: req.body.email,
                 };
+                let ses = new AWS.SES({apiVersion: '2010-12-01'});
+                let params = {
+                    EmailAddress: req.body.email
+                };
+                ses.verifyEmailIdentity(params, function (err, data) {
+                    if (err) console.log(err, err.stack); // an error occurred
+                    else console.log(data);           // successful response
+                });
                 User.findOne({email: data.email})
                     .then((user) => {
                         user.updateOne({
@@ -202,13 +214,13 @@ exports.reserveSeat = (req, res, user) => {
                         SEAT_ID: s.SEAT_ID,
                         STATUS: 'RESERVED'
                     });
-                }else{
+                } else {
                     seats.push(s);
                 }
             });
             table.SEATS = seats;
-            table.save((err)=>{
-                if(err){
+            table.save((err) => {
+                if (err) {
                     console.log(err);
                     return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
                 }
@@ -220,11 +232,12 @@ exports.reserveSeat = (req, res, user) => {
                 reservation.STATUS = "ACTIVE";
                 reservation.UNTIL = Date.now() + 300000;
 
-                reservation.save((err)=>{
-                    if(err){
+                reservation.save((err) => {
+                    if (err) {
                         console.log(err);
                         return res.status(500).json({reservationStatus: false, message: "Table doesn't exist"});
                     }
+                    sendInteractionEmail(user);
                     return res.status(200).json({reservationStatus: true, reservation: reservation});
                 });
             });
@@ -238,6 +251,85 @@ exports.reserveSeat = (req, res, user) => {
         return res.status(500).json({reservationStatus: false});
     });
 };
+
+/**
+ * Method that send the user an email to encourage the interaction with others in the table
+ * @param user that has done the reservation
+ */
+function sendInteractionEmail(user) {
+    // Create sendEmail params
+    let params = {
+        Destination: {
+            ToAddresses: [
+                user.email,
+            ]
+        },
+        Message: {
+            Body: {
+                Html: {
+                    Charset: "UTF-8",
+                    Data: `<!DOCTYPE html>
+<html>
+<title>Web Page Design</title>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style type="text/css">
+    h3{
+        margin:5%;
+    },
+    .header{
+        background: #22ff22;
+    }
+</style>
+</head>
+<body>
+    
+<div class="jumbotron header">
+    <h1>
+        ${user.name} tu reserva te espera!
+    </h1>
+</div>
+<div class"card">
+    <div class="card-body">
+        <div class="row justify-content-around">
+            <div class="col-3">
+        <img class="img-fluid" src="https://image.flaticon.com/icons/svg/809/809447.svg"/>
+        </div>
+        </div>
+    <h3>
+    Queremos que tu experiencia sea completa y agradable mientras utilizas el espacio,
+    por lo que te queríamos invitar a que rompas el hielo con los que están en la mesa. 
+    Puedes empezar preguntándoles qué opinan de la aplicación ;)
+    </h3>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>`
+                }
+            },
+            Subject: {
+                Charset: 'UTF-8',
+                Data: 'Gracias por usar Comuniapp!'
+            }
+        },
+        Source: process.env.SENDER_EMAIL,
+        ReplyToAddresses: [
+            process.env.SENDER_EMAIL
+        ],
+    };
+
+    let sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+    sendPromise.then(
+        function (data) {
+            console.log(data.MessageId);
+        }).catch(
+        function (err) {
+            console.error(err, err.stack);
+        });
+}
 
 /**
  * Method meant to get all reservations
@@ -263,15 +355,15 @@ exports.cancelReservation = (req, res, user) => {
                             SEAT_ID: reservation.SEAT_ID,
                             STATUS: "FREE"
                         })
-                    }else{
+                    } else {
                         seats.push(s);
                     }
                 });
                 table.AVAILABLE_SEATS += 1;
                 table.SEATS = seats;
                 console.log(table);
-                table.save((err)=>{
-                    if(err){
+                table.save((err) => {
+                    if (err) {
                         console.log(err);
                         return res.status(500).json({message: "Reservation doesn't exist"});
                     }
@@ -291,9 +383,8 @@ exports.cancelReservation = (req, res, user) => {
  * Method meant to retrieve all available tables from the database
  * @param req
  * @param res
- * @param user
  */
-exports.getTableForModules = (req, res, user) => {
+exports.getTableForModules = (req, res) => {
     let tableId = req.params.tableId;
     Table.findOne({TABLE_ID: tableId}).then((table) => {
         return res.status(200).json(table);

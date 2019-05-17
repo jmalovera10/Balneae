@@ -1,4 +1,4 @@
-# Comuniapp
+# Balneae
 
 This app is designed to share tables between people in order to create a community, find new friends and have a better 
 administration of public spaces.

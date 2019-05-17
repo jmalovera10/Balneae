@@ -12,7 +12,7 @@ export default class Navbar extends Component {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <NavLink to="/">
-                    <button className="btn my-2 my-sm-0">Comuniapp</button>
+                    <button className="btn my-2 my-sm-0">Balneae</button>
                 </NavLink>
 
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
